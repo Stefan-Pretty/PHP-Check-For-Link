@@ -79,9 +79,17 @@
 	$url = $_GET['url'];
 	$test_url = $_GET['test_url'];
 
-	/**
-	*	@todo Add URL validation for input if being passed via HTTP request as per this example;
-	**/
+
+	if(!preg_match('/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/', $url))
+	{
+		echo "Error: Invalid URL (". $url .")";
+		exit;
+	}
+	if(!preg_match('/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/', $test_url))
+	{
+		echo "Error: Invalid test URL (". $test_url .")";
+		exit;
+	}
 
 	//get the content of the page
 	if(!$content = fetch_url($url)){
@@ -92,7 +100,7 @@
 	}
 
 	$dom = new DomDocument();
-	$dom->loadHTML($content);
+	@$dom->loadHTML($content);
 	$urls = $dom->getElementsByTagName('a');
 
 	$exists = false;
